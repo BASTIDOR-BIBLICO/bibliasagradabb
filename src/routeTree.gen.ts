@@ -9,38 +9,141 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as DevocionaisRouteImport } from './routes/devocionais'
+import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
+import { Route as BibliaBookIdIndexRouteImport } from './routes/biblia.$bookId.index'
+import { Route as BibliaBookIdChapterRouteImport } from './routes/biblia.$bookId.$chapter'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DevocionaisRoute = DevocionaisRouteImport.update({
+  id: '/devocionais',
+  path: '/devocionais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliaIndexRoute = BibliaIndexRouteImport.update({
+  id: '/biblia/',
+  path: '/biblia/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliaBookIdIndexRoute = BibliaBookIdIndexRouteImport.update({
+  id: '/biblia/$bookId/',
+  path: '/biblia/$bookId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliaBookIdChapterRoute = BibliaBookIdChapterRouteImport.update({
+  id: '/biblia/$bookId/$chapter',
+  path: '/biblia/$bookId/$chapter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
+  '/devocionais': typeof DevocionaisRoute
+  '/login': typeof LoginRoute
+  '/biblia/': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
+  '/devocionais': typeof DevocionaisRoute
+  '/login': typeof LoginRoute
+  '/biblia': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cadastro': typeof CadastroRoute
+  '/devocionais': typeof DevocionaisRoute
+  '/login': typeof LoginRoute
+  '/biblia/': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/cadastro'
+    | '/devocionais'
+    | '/login'
+    | '/biblia/'
+    | '/biblia/$bookId/$chapter'
+    | '/biblia/$bookId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/cadastro'
+    | '/devocionais'
+    | '/login'
+    | '/biblia'
+    | '/biblia/$bookId/$chapter'
+    | '/biblia/$bookId'
+  id:
+    | '__root__'
+    | '/'
+    | '/cadastro'
+    | '/devocionais'
+    | '/login'
+    | '/biblia/'
+    | '/biblia/$bookId/$chapter'
+    | '/biblia/$bookId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CadastroRoute: typeof CadastroRoute
+  DevocionaisRoute: typeof DevocionaisRoute
+  LoginRoute: typeof LoginRoute
+  BibliaIndexRoute: typeof BibliaIndexRoute
+  BibliaBookIdChapterRoute: typeof BibliaBookIdChapterRoute
+  BibliaBookIdIndexRoute: typeof BibliaBookIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/devocionais': {
+      id: '/devocionais'
+      path: '/devocionais'
+      fullPath: '/devocionais'
+      preLoaderRoute: typeof DevocionaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +151,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblia/': {
+      id: '/biblia/'
+      path: '/biblia'
+      fullPath: '/biblia/'
+      preLoaderRoute: typeof BibliaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblia/$bookId/': {
+      id: '/biblia/$bookId/'
+      path: '/biblia/$bookId'
+      fullPath: '/biblia/$bookId/'
+      preLoaderRoute: typeof BibliaBookIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/biblia/$bookId/$chapter': {
+      id: '/biblia/$bookId/$chapter'
+      path: '/biblia/$bookId/$chapter'
+      fullPath: '/biblia/$bookId/$chapter'
+      preLoaderRoute: typeof BibliaBookIdChapterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CadastroRoute: CadastroRoute,
+  DevocionaisRoute: DevocionaisRoute,
+  LoginRoute: LoginRoute,
+  BibliaIndexRoute: BibliaIndexRoute,
+  BibliaBookIdChapterRoute: BibliaBookIdChapterRoute,
+  BibliaBookIdIndexRoute: BibliaBookIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
