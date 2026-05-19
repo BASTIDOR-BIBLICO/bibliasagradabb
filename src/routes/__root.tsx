@@ -11,6 +11,7 @@ import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
+import { InstallBanner } from "@/components/InstallBanner";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
