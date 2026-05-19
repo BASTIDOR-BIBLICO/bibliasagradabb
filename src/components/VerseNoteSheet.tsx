@@ -56,6 +56,10 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
 
   const handleDelete = async () => {
     if (!existing) return;
+    if (!user) {
+      goLogin();
+      return;
+    }
     await devotionalsService.remove(existing.id);
     onOpenChange(false);
   };
