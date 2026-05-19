@@ -13,10 +13,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BibliaIndexRouteImport } from './routes/biblia.index'
 import { Route as AuthenticatedDevocionaisRouteImport } from './routes/_authenticated/devocionais'
-import { Route as AuthenticatedBibliaIndexRouteImport } from './routes/_authenticated/biblia.index'
-import { Route as AuthenticatedBibliaBookIdIndexRouteImport } from './routes/_authenticated/biblia.$bookId.index'
-import { Route as AuthenticatedBibliaBookIdChapterRouteImport } from './routes/_authenticated/biblia.$bookId.$chapter'
+import { Route as BibliaBookIdIndexRouteImport } from './routes/biblia.$bookId.index'
+import { Route as BibliaBookIdChapterRouteImport } from './routes/biblia.$bookId.$chapter'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -37,48 +37,45 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BibliaIndexRoute = BibliaIndexRouteImport.update({
+  id: '/biblia/',
+  path: '/biblia/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedDevocionaisRoute =
   AuthenticatedDevocionaisRouteImport.update({
     id: '/devocionais',
     path: '/devocionais',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedBibliaIndexRoute =
-  AuthenticatedBibliaIndexRouteImport.update({
-    id: '/biblia/',
-    path: '/biblia/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedBibliaBookIdIndexRoute =
-  AuthenticatedBibliaBookIdIndexRouteImport.update({
-    id: '/biblia/$bookId/',
-    path: '/biblia/$bookId/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedBibliaBookIdChapterRoute =
-  AuthenticatedBibliaBookIdChapterRouteImport.update({
-    id: '/biblia/$bookId/$chapter',
-    path: '/biblia/$bookId/$chapter',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
+const BibliaBookIdIndexRoute = BibliaBookIdIndexRouteImport.update({
+  id: '/biblia/$bookId/',
+  path: '/biblia/$bookId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BibliaBookIdChapterRoute = BibliaBookIdChapterRouteImport.update({
+  id: '/biblia/$bookId/$chapter',
+  path: '/biblia/$bookId/$chapter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/biblia/': typeof AuthenticatedBibliaIndexRoute
-  '/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/biblia/$bookId/': typeof AuthenticatedBibliaBookIdIndexRoute
+  '/biblia/': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/biblia': typeof AuthenticatedBibliaIndexRoute
-  '/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/biblia/$bookId': typeof AuthenticatedBibliaBookIdIndexRoute
+  '/biblia': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId': typeof BibliaBookIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,9 +84,9 @@ export interface FileRoutesById {
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/_authenticated/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/_authenticated/biblia/': typeof AuthenticatedBibliaIndexRoute
-  '/_authenticated/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/_authenticated/biblia/$bookId/': typeof AuthenticatedBibliaBookIdIndexRoute
+  '/biblia/': typeof BibliaIndexRoute
+  '/biblia/$bookId/$chapter': typeof BibliaBookIdChapterRoute
+  '/biblia/$bookId/': typeof BibliaBookIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -117,9 +114,9 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/login'
     | '/_authenticated/devocionais'
-    | '/_authenticated/biblia/'
-    | '/_authenticated/biblia/$bookId/$chapter'
-    | '/_authenticated/biblia/$bookId/'
+    | '/biblia/'
+    | '/biblia/$bookId/$chapter'
+    | '/biblia/$bookId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -127,6 +124,9 @@ export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   CadastroRoute: typeof CadastroRoute
   LoginRoute: typeof LoginRoute
+  BibliaIndexRoute: typeof BibliaIndexRoute
+  BibliaBookIdChapterRoute: typeof BibliaBookIdChapterRoute
+  BibliaBookIdIndexRoute: typeof BibliaBookIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -159,6 +159,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/biblia/': {
+      id: '/biblia/'
+      path: '/biblia'
+      fullPath: '/biblia/'
+      preLoaderRoute: typeof BibliaIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/devocionais': {
       id: '/_authenticated/devocionais'
       path: '/devocionais'
@@ -166,42 +173,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDevocionaisRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/biblia/': {
-      id: '/_authenticated/biblia/'
-      path: '/biblia'
-      fullPath: '/biblia/'
-      preLoaderRoute: typeof AuthenticatedBibliaIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/biblia/$bookId/': {
-      id: '/_authenticated/biblia/$bookId/'
+    '/biblia/$bookId/': {
+      id: '/biblia/$bookId/'
       path: '/biblia/$bookId'
       fullPath: '/biblia/$bookId/'
-      preLoaderRoute: typeof AuthenticatedBibliaBookIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof BibliaBookIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/biblia/$bookId/$chapter': {
-      id: '/_authenticated/biblia/$bookId/$chapter'
+    '/biblia/$bookId/$chapter': {
+      id: '/biblia/$bookId/$chapter'
       path: '/biblia/$bookId/$chapter'
       fullPath: '/biblia/$bookId/$chapter'
-      preLoaderRoute: typeof AuthenticatedBibliaBookIdChapterRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof BibliaBookIdChapterRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDevocionaisRoute: typeof AuthenticatedDevocionaisRoute
-  AuthenticatedBibliaIndexRoute: typeof AuthenticatedBibliaIndexRoute
-  AuthenticatedBibliaBookIdChapterRoute: typeof AuthenticatedBibliaBookIdChapterRoute
-  AuthenticatedBibliaBookIdIndexRoute: typeof AuthenticatedBibliaBookIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDevocionaisRoute: AuthenticatedDevocionaisRoute,
-  AuthenticatedBibliaIndexRoute: AuthenticatedBibliaIndexRoute,
-  AuthenticatedBibliaBookIdChapterRoute: AuthenticatedBibliaBookIdChapterRoute,
-  AuthenticatedBibliaBookIdIndexRoute: AuthenticatedBibliaBookIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -213,17 +207,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   CadastroRoute: CadastroRoute,
   LoginRoute: LoginRoute,
+  BibliaIndexRoute: BibliaIndexRoute,
+  BibliaBookIdChapterRoute: BibliaBookIdChapterRoute,
+  BibliaBookIdIndexRoute: BibliaBookIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

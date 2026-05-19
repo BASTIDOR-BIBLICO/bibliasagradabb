@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { devotionalsService } from "@/lib/supabase-stub";
 import { devotionalStore } from "@/lib/devotionals/storage";
-import { Trash2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Trash2, Lock } from "lucide-react";
 
 interface Props {
   open: boolean;
@@ -19,6 +21,9 @@ interface Props {
 export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, verse, verseText }: Props) {
   const [note, setNote] = useState("");
   const existing = verse != null ? devotionalStore.forVerse(bookId, chapter, verse) : undefined;
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setNote(existing?.note ?? "");
@@ -26,8 +31,17 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
 
   if (verse == null) return null;
 
+  const goLogin = () => {
+    onOpenChange(false);
+    navigate({ to: "/login", search: { redirect: location.href } });
+  };
+
   const handleSave = async () => {
     if (!note.trim()) return;
+    if (!user) {
+      goLogin();
+      return;
+    }
     await devotionalsService.upsert({
       id: existing?.id,
       bookId,
@@ -42,6 +56,10 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
 
   const handleDelete = async () => {
     if (!existing) return;
+    if (!user) {
+      goLogin();
+      return;
+    }
     await devotionalsService.remove(existing.id);
     onOpenChange(false);
   };
@@ -62,6 +80,18 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
           <label className="text-sm font-medium text-muted-foreground">
             Sua nota devocional
           </label>
+          {!loading && !user && (
+            <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+              <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>
+                Para salvar sua reflexão, faça{" "}
+                <button onClick={goLogin} className="font-medium text-primary underline-offset-2 hover:underline">
+                  login ou crie sua conta
+                </button>
+                .
+              </span>
+            </div>
+          )}
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -80,7 +110,7 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
                 Cancelar
               </Button>
               <Button onClick={handleSave} disabled={!note.trim()}>
-                Salvar
+                {user ? "Salvar" : "Entrar para salvar"}
               </Button>
             </div>
           </div>

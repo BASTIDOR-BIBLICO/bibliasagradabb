@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
 import { useBook, useChapterCount } from "@/lib/bible/queries";
 
-export const Route = createFileRoute("/_authenticated/biblia/$bookId/")({
+export const Route = createFileRoute("/biblia/$bookId/")({
   component: ChapterGrid,
   head: () => ({ meta: [{ title: "Livro — Lectio" }] }),
 });

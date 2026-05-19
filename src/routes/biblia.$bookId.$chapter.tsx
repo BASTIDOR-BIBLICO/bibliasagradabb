@@ -9,7 +9,7 @@ import { VerseNoteSheet } from "@/components/VerseNoteSheet";
 import { readingProgress } from "@/lib/reading-progress";
 import { useBook, useChapter, useChapterCount } from "@/lib/bible/queries";
 
-export const Route = createFileRoute("/_authenticated/biblia/$bookId/$chapter")({
+export const Route = createFileRoute("/biblia/$bookId/$chapter")({
   component: ReaderPage,
   head: () => ({ meta: [{ title: "Leitura — Lectio" }] }),
 });
