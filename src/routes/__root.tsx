@@ -11,7 +11,6 @@ import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
-import { InstallBanner } from "@/components/InstallBanner";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -62,24 +61,25 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Bíblia Sagrada BB — Leitura Bíblica e Devocionais" },
-      { name: "description", content: "Aplicativo minimalista para leitura da Bíblia e notas devocionais pessoais." },
-      { name: "theme-color", content: "#FAF9F6" },
-      { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
-      { name: "apple-mobile-web-app-title", content: "Bíblia Sagrada BB" },
-      { name: "mobile-web-app-capable", content: "yes" },
+      { title: "Bíblia Sagrada BB" },
+      { name: "description", content: "A sua Bíblia Sagrada digital e premium. Leitura rápida, limpa e sem distrações." },
+      { name: "theme-color", content: "#f8f6f1" },
+      { property: "og:title", content: "Bíblia Sagrada BB" },
+      { name: "twitter:title", content: "Bíblia Sagrada BB" },
+      { property: "og:description", content: "A sua Bíblia Sagrada digital e premium. Leitura rápida, limpa e sem distrações." },
+      { name: "twitter:description", content: "A sua Bíblia Sagrada digital e premium. Leitura rápida, limpa e sem distrações." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3vb6P1xyRaNf7QIkY6hwc0h5Nwc2/social-images/social-1779199107808-LOGO_QUADRADA_BIBLIA.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/3vb6P1xyRaNf7QIkY6hwc0h5Nwc2/social-images/social-1779199107808-LOGO_QUADRADA_BIBLIA.webp" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:type", content: "website" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/manifest.json" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
-      { rel: "icon", type: "image/png", href: "/icon-192.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap",
       },
     ],
   }),
@@ -128,7 +128,6 @@ function LayoutShell() {
     <div className="min-h-screen bg-background">
       {!hideHeader && <AppHeader />}
       <Outlet />
-      <InstallBanner />
     </div>
   );
 }
