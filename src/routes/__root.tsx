@@ -128,6 +128,7 @@ function LayoutShell() {
     <div className="min-h-screen bg-background">
       {!hideHeader && <AppHeader />}
       <Outlet />
+      <InstallBanner />
     </div>
   );
 }
