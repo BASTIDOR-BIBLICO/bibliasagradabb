@@ -4,7 +4,7 @@ import { useBook, useChapterCount } from "@/lib/bible/queries";
 
 export const Route = createFileRoute("/biblia/$bookId/")({
   component: ChapterGrid,
-  head: () => ({ meta: [{ title: "Livro — Lectio" }] }),
+  head: () => ({ meta: [{ title: "Livro — Bíblia Sagrada BB" }] }),
 });
 
 function ChapterGrid() {

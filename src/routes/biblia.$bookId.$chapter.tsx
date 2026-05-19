@@ -11,7 +11,7 @@ import { useBook, useChapter, useChapterCount } from "@/lib/bible/queries";
 
 export const Route = createFileRoute("/biblia/$bookId/$chapter")({
   component: ReaderPage,
-  head: () => ({ meta: [{ title: "Leitura — Lectio" }] }),
+  head: () => ({ meta: [{ title: "Leitura — Bíblia Sagrada BB" }] }),
 });
 
 function ReaderPage() {

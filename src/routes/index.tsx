@@ -8,7 +8,7 @@ import { useDevotionals } from "@/hooks/useDevotionals";
 export const Route = createFileRoute("/")({
   component: Dashboard,
   head: () => ({
-    meta: [{ title: "Início — Lectio" }],
+    meta: [{ title: "Início — Bíblia Sagrada BB" }],
   }),
 });
 
