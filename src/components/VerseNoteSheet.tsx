@@ -21,6 +21,9 @@ interface Props {
 export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, verse, verseText }: Props) {
   const [note, setNote] = useState("");
   const existing = verse != null ? devotionalStore.forVerse(bookId, chapter, verse) : undefined;
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     setNote(existing?.note ?? "");
@@ -28,8 +31,17 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
 
   if (verse == null) return null;
 
+  const goLogin = () => {
+    onOpenChange(false);
+    navigate({ to: "/login", search: { redirect: location.href } });
+  };
+
   const handleSave = async () => {
     if (!note.trim()) return;
+    if (!user) {
+      goLogin();
+      return;
+    }
     await devotionalsService.upsert({
       id: existing?.id,
       bookId,
