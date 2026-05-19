@@ -11,6 +11,7 @@ import { useEffect } from "react";
 
 import appCss from "../styles.css?url";
 import { AppHeader } from "@/components/AppHeader";
+import { InstallBanner } from "@/components/InstallBanner";
 import { supabase } from "@/integrations/supabase/client";
 
 function NotFoundComponent() {
@@ -64,9 +65,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Bíblia Sagrada BB — Leitura Bíblica e Devocionais" },
       { name: "description", content: "Aplicativo minimalista para leitura da Bíblia e notas devocionais pessoais." },
       { name: "theme-color", content: "#FAF9F6" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Bíblia Sagrada BB" },
+      { name: "mobile-web-app-capable", content: "yes" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/manifest.json" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "icon", type: "image/png", href: "/icon-192.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
@@ -120,6 +128,7 @@ function LayoutShell() {
     <div className="min-h-screen bg-background">
       {!hideHeader && <AppHeader />}
       <Outlet />
+      <InstallBanner />
     </div>
   );
 }
