@@ -3,10 +3,11 @@ import { BookOpen, NotebookPen, LogOut, Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/lib/supabase-stub";
 import { useReaderSettings } from "@/hooks/useReaderSettings";
+import { useAuth } from "@/hooks/useAuth";
 
 export function AppHeader() {
   const router = useRouter();
-  const user = authService.current();
+  const { user } = useAuth();
   const { theme, toggleTheme } = useReaderSettings();
 
   const handleLogout = async () => {

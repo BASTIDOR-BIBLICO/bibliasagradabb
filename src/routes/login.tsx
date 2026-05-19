@@ -6,12 +6,16 @@ import { Label } from "@/components/ui/label";
 import { authService } from "@/lib/supabase-stub";
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    redirect: typeof search.redirect === "string" ? search.redirect : "/",
+  }),
   component: LoginPage,
   head: () => ({ meta: [{ title: "Entrar — Lectio" }] }),
 });
 
 function LoginPage() {
   const router = useRouter();
+  const { redirect } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -22,7 +26,7 @@ function LoginPage() {
     setLoading(true); setError(null);
     try {
       await authService.signIn(email, password);
-      router.navigate({ to: "/" });
+      router.navigate({ to: redirect || "/" });
     } catch (err) {
       setError((err as Error).message);
     } finally { setLoading(false); }

@@ -1,16 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
-import { oldTestament, newTestament, type BibleBook } from "@/lib/bible/books";
+import { useMemo, useState } from "react";
+import { useBooks, type DbBook } from "@/lib/bible/queries";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/biblia/")({
+export const Route = createFileRoute("/_authenticated/biblia/")({
   component: BibleIndex,
   head: () => ({ meta: [{ title: "Bíblia — Lectio" }] }),
 });
 
+const isOld = (t: DbBook["testament"]) => /antigo|old|^at$/i.test(String(t));
+
 function BibleIndex() {
   const [tab, setTab] = useState<"AT" | "NT">("AT");
-  const books = tab === "AT" ? oldTestament : newTestament;
+  const { data: books, isLoading, error } = useBooks();
+
+  const filtered = useMemo(() => {
+    if (!books) return [];
+    return books.filter((b) => (tab === "AT" ? isOld(b.testament) : !isOld(b.testament)));
+  }, [books, tab]);
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
@@ -34,16 +41,18 @@ function BibleIndex() {
         ))}
       </div>
 
+      {isLoading && <p className="text-sm text-muted-foreground">Carregando livros...</p>}
+      {error && <p className="text-sm text-destructive">Erro ao carregar livros.</p>}
+
       <ul className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-        {books.map((book: BibleBook) => (
+        {filtered.map((book) => (
           <li key={book.id}>
             <Link
               to="/biblia/$bookId"
-              params={{ bookId: book.id }}
+              params={{ bookId: String(book.id) }}
               className="block rounded-lg border border-transparent px-3 py-2.5 transition hover:border-border hover:bg-card"
             >
               <span className="font-serif text-base">{book.name}</span>
-              <span className="ml-2 text-xs text-muted-foreground">{book.chapters} cap.</span>
             </Link>
           </li>
         ))}

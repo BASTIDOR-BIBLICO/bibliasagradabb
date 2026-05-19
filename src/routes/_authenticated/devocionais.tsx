@@ -3,7 +3,7 @@ import { useDevotionals } from "@/hooks/useDevotionals";
 import { NotebookPen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/devocionais")({
+export const Route = createFileRoute("/_authenticated/devocionais")({
   component: DevotionalsPage,
   head: () => ({ meta: [{ title: "Meus Devocionais — Lectio" }] }),
 });
@@ -11,7 +11,6 @@ export const Route = createFileRoute("/devocionais")({
 function DevotionalsPage() {
   const { items } = useDevotionals();
 
-  // group by date (yyyy-mm-dd)
   const groups = items.reduce<Record<string, typeof items>>((acc, d) => {
     const key = d.createdAt.slice(0, 10);
     (acc[key] ||= []).push(d);
