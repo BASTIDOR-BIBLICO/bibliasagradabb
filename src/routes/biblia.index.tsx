@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/biblia/")({
   component: BibleIndex,
-  head: () => ({ meta: [{ title: "Bíblia — Lectio" }] }),
+  head: () => ({ meta: [{ title: "Bíblia — Bíblia Sagrada BB" }] }),
 });
 
 const isOld = (t: DbBook["testament"]) => /antigo|old|^at$/i.test(String(t));

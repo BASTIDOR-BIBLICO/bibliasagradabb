@@ -61,7 +61,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lectio — Leitura Bíblica e Devocionais" },
+      { title: "Bíblia Sagrada BB — Leitura Bíblica e Devocionais" },
       { name: "description", content: "Aplicativo minimalista para leitura da Bíblia e notas devocionais pessoais." },
       { name: "theme-color", content: "#f8f6f1" },
     ],

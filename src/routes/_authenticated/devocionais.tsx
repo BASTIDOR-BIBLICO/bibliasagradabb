@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/devocionais")({
   component: DevotionalsPage,
-  head: () => ({ meta: [{ title: "Meus Devocionais — Lectio" }] }),
+  head: () => ({ meta: [{ title: "Meus Devocionais — Bíblia Sagrada BB" }] }),
 });
 
 function DevotionalsPage() {

@@ -20,7 +20,7 @@ export function AppHeader() {
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
         <Link to="/" className="flex items-center gap-2 font-serif text-lg tracking-tight">
           <span className="inline-block h-2 w-2 rounded-full bg-primary" />
-          <span>Lectio</span>
+          <span>Bíblia Sagrada BB</span>
         </Link>
 
         <nav className="flex items-center gap-1">

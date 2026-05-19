@@ -10,7 +10,7 @@ export const Route = createFileRoute("/login")({
     redirect: typeof search.redirect === "string" ? search.redirect : "/",
   }),
   component: LoginPage,
-  head: () => ({ meta: [{ title: "Entrar — Lectio" }] }),
+  head: () => ({ meta: [{ title: "Entrar — Bíblia Sagrada BB" }] }),
 });
 
 function LoginPage() {
@@ -36,7 +36,7 @@ function LoginPage() {
     <main className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
         <Link to="/" className="mb-10 flex items-center justify-center gap-2 font-serif text-2xl tracking-tight">
-          <span className="inline-block h-2 w-2 rounded-full bg-primary" /> Lectio
+          <span className="inline-block h-2 w-2 rounded-full bg-primary" /> Bíblia Sagrada BB
         </Link>
 
         <h1 className="font-serif text-3xl">Bem-vindo de volta</h1>
