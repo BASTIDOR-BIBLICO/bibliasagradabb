@@ -22,7 +22,7 @@ function SignupPage() {
     setLoading(true); setError(null);
     try {
       await authService.signUp(email, password);
-      router.navigate({ to: "/" });
+      router.navigate({ to: "/login" });
     } catch (err) {
       setError((err as Error).message);
     } finally { setLoading(false); }
