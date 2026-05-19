@@ -1,56 +1,40 @@
 /**
- * Supabase service stub.
- *
- * Quando o backend estiver conectado (Lovable Cloud), substitua o conteúdo
- * destas funções por chamadas reais ao client `@/integrations/supabase/client`.
- * A assinatura das funções foi pensada para corresponder 1:1 às tabelas
- * sugeridas: `profiles`, `devotionals`, `reading_progress`.
+ * Auth + devotionals service.
+ * Auth: Supabase real. Devotionals: localStorage (persistência local).
  */
-
-import { devotionalStore, type Devotional } from "@/lib/devotionals/storage";
-
-export interface AuthUser {
-  id: string;
-  email: string;
-}
-
-const AUTH_KEY = "biblia.auth.user";
+import { supabase } from "@/integrations/supabase/client";
+import { devotionalStore } from "@/lib/devotionals/storage";
 
 export const authService = {
-  async signIn(email: string, _password: string): Promise<AuthUser> {
-    // TODO: supabase.auth.signInWithPassword({ email, password })
-    const user: AuthUser = { id: crypto.randomUUID(), email };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    return user;
+  async signIn(email: string, password: string) {
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    return data.user;
   },
-  async signUp(email: string, _password: string): Promise<AuthUser> {
-    // TODO: supabase.auth.signUp({ email, password })
-    const user: AuthUser = { id: crypto.randomUUID(), email };
-    localStorage.setItem(AUTH_KEY, JSON.stringify(user));
-    return user;
+  async signUp(email: string, password: string) {
+    const redirectTo = typeof window !== "undefined" ? window.location.origin : undefined;
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { emailRedirectTo: redirectTo },
+    });
+    if (error) throw error;
+    return data.user;
   },
   async signOut() {
-    // TODO: supabase.auth.signOut()
-    localStorage.removeItem(AUTH_KEY);
-  },
-  current(): AuthUser | null {
-    if (typeof window === "undefined") return null;
-    const raw = localStorage.getItem(AUTH_KEY);
-    return raw ? (JSON.parse(raw) as AuthUser) : null;
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
   },
 };
 
 export const devotionalsService = {
-  async list(): Promise<Devotional[]> {
-    // TODO: supabase.from('devotionals').select('*').order('created_at', { ascending: false })
+  async list() {
     return devotionalStore.list();
   },
   async upsert(input: Parameters<typeof devotionalStore.upsert>[0]) {
-    // TODO: supabase.from('devotionals').upsert(...)
     devotionalStore.upsert(input);
   },
   async remove(id: string) {
-    // TODO: supabase.from('devotionals').delete().eq('id', id)
     devotionalStore.remove(id);
   },
 };
