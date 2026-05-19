@@ -14,9 +14,6 @@ import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedDevocionaisRouteImport } from './routes/_authenticated/devocionais'
-import { Route as AuthenticatedBibliaIndexRouteImport } from './routes/_authenticated/biblia.index'
-import { Route as AuthenticatedBibliaBookIdIndexRouteImport } from './routes/_authenticated/biblia.$bookId.index'
-import { Route as AuthenticatedBibliaBookIdChapterRouteImport } from './routes/_authenticated/biblia.$bookId.$chapter'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -43,42 +40,18 @@ const AuthenticatedDevocionaisRoute =
     path: '/devocionais',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedBibliaIndexRoute =
-  AuthenticatedBibliaIndexRouteImport.update({
-    id: '/biblia/',
-    path: '/biblia/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedBibliaBookIdIndexRoute =
-  AuthenticatedBibliaBookIdIndexRouteImport.update({
-    id: '/biblia/$bookId/',
-    path: '/biblia/$bookId/',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedBibliaBookIdChapterRoute =
-  AuthenticatedBibliaBookIdChapterRouteImport.update({
-    id: '/biblia/$bookId/$chapter',
-    path: '/biblia/$bookId/$chapter',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/biblia/': typeof AuthenticatedBibliaIndexRoute
-  '/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/biblia/$bookId/': typeof AuthenticatedBibliaBookIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/biblia': typeof AuthenticatedBibliaIndexRoute
-  '/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/biblia/$bookId': typeof AuthenticatedBibliaBookIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,29 +60,12 @@ export interface FileRoutesById {
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/_authenticated/devocionais': typeof AuthenticatedDevocionaisRoute
-  '/_authenticated/biblia/': typeof AuthenticatedBibliaIndexRoute
-  '/_authenticated/biblia/$bookId/$chapter': typeof AuthenticatedBibliaBookIdChapterRoute
-  '/_authenticated/biblia/$bookId/': typeof AuthenticatedBibliaBookIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/cadastro'
-    | '/login'
-    | '/devocionais'
-    | '/biblia/'
-    | '/biblia/$bookId/$chapter'
-    | '/biblia/$bookId/'
+  fullPaths: '/' | '/cadastro' | '/login' | '/devocionais'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/cadastro'
-    | '/login'
-    | '/devocionais'
-    | '/biblia'
-    | '/biblia/$bookId/$chapter'
-    | '/biblia/$bookId'
+  to: '/' | '/cadastro' | '/login' | '/devocionais'
   id:
     | '__root__'
     | '/'
@@ -117,9 +73,6 @@ export interface FileRouteTypes {
     | '/cadastro'
     | '/login'
     | '/_authenticated/devocionais'
-    | '/_authenticated/biblia/'
-    | '/_authenticated/biblia/$bookId/$chapter'
-    | '/_authenticated/biblia/$bookId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,42 +119,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDevocionaisRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/biblia/': {
-      id: '/_authenticated/biblia/'
-      path: '/biblia'
-      fullPath: '/biblia/'
-      preLoaderRoute: typeof AuthenticatedBibliaIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/biblia/$bookId/': {
-      id: '/_authenticated/biblia/$bookId/'
-      path: '/biblia/$bookId'
-      fullPath: '/biblia/$bookId/'
-      preLoaderRoute: typeof AuthenticatedBibliaBookIdIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/biblia/$bookId/$chapter': {
-      id: '/_authenticated/biblia/$bookId/$chapter'
-      path: '/biblia/$bookId/$chapter'
-      fullPath: '/biblia/$bookId/$chapter'
-      preLoaderRoute: typeof AuthenticatedBibliaBookIdChapterRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
   }
 }
 
 interface AuthenticatedRouteChildren {
   AuthenticatedDevocionaisRoute: typeof AuthenticatedDevocionaisRoute
-  AuthenticatedBibliaIndexRoute: typeof AuthenticatedBibliaIndexRoute
-  AuthenticatedBibliaBookIdChapterRoute: typeof AuthenticatedBibliaBookIdChapterRoute
-  AuthenticatedBibliaBookIdIndexRoute: typeof AuthenticatedBibliaBookIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDevocionaisRoute: AuthenticatedDevocionaisRoute,
-  AuthenticatedBibliaIndexRoute: AuthenticatedBibliaIndexRoute,
-  AuthenticatedBibliaBookIdChapterRoute: AuthenticatedBibliaBookIdChapterRoute,
-  AuthenticatedBibliaBookIdIndexRoute: AuthenticatedBibliaBookIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
