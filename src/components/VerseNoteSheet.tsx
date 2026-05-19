@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "@tanstack/react-router";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { devotionalsService } from "@/lib/supabase-stub";
 import { devotionalStore } from "@/lib/devotionals/storage";
-import { Trash2 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Trash2, Lock } from "lucide-react";
 
 interface Props {
   open: boolean;
