@@ -80,6 +80,18 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
           <label className="text-sm font-medium text-muted-foreground">
             Sua nota devocional
           </label>
+          {!loading && !user && (
+            <div className="flex items-start gap-2 rounded-lg border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
+              <Lock className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>
+                Para salvar sua reflexão, faça{" "}
+                <button onClick={goLogin} className="font-medium text-primary underline-offset-2 hover:underline">
+                  login ou crie sua conta
+                </button>
+                .
+              </span>
+            </div>
+          )}
           <Textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
@@ -98,7 +110,7 @@ export function VerseNoteSheet({ open, onOpenChange, bookId, bookName, chapter, 
                 Cancelar
               </Button>
               <Button onClick={handleSave} disabled={!note.trim()}>
-                Salvar
+                {user ? "Salvar" : "Entrar para salvar"}
               </Button>
             </div>
           </div>
