@@ -3,7 +3,7 @@ import { useDevotionals } from "@/hooks/useDevotionals";
 import { NotebookPen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/devocionais")({
+export const Route = createFileRoute("/_authenticated/devocionais")({
   component: DevotionalsPage,
   head: () => ({ meta: [{ title: "Meus Devocionais — Lectio" }] }),
 });

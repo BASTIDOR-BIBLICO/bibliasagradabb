@@ -10,7 +10,7 @@ import { useDevotionals } from "@/hooks/useDevotionals";
 import { VerseNoteSheet } from "@/components/VerseNoteSheet";
 import { readingProgress } from "@/lib/reading-progress";
 
-export const Route = createFileRoute("/biblia/$bookId/$chapter")({
+export const Route = createFileRoute("/_authenticated/biblia/$bookId/$chapter")({
   component: ReaderPage,
   head: ({ params }) => {
     const b = getBook(params.bookId);

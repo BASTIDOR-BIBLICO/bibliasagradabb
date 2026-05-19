@@ -3,7 +3,7 @@ import { useState } from "react";
 import { oldTestament, newTestament, type BibleBook } from "@/lib/bible/books";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/biblia/")({
+export const Route = createFileRoute("/_authenticated/biblia/")({
   component: BibleIndex,
   head: () => ({ meta: [{ title: "Bíblia — Lectio" }] }),
 });

@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getBook } from "@/lib/bible/books";
 import { ChevronLeft } from "lucide-react";
 
-export const Route = createFileRoute("/biblia/$bookId/")({
+export const Route = createFileRoute("/_authenticated/biblia/$bookId/")({
   component: ChapterGrid,
   head: ({ params }) => {
     const b = getBook(params.bookId);
