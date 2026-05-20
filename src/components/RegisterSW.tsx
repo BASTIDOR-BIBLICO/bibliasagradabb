@@ -19,11 +19,7 @@ export function RegisterSW() {
     }
     const host = window.location.hostname;
     const isPreviewHost =
-      host.includes("id-preview--") ||
-      host.includes("lovableproject.com") ||
-      host.includes("lovable.app") === false && host !== "localhost"
-        ? false
-        : host.includes("id-preview--") || host.includes("lovableproject.com");
+      host.includes("id-preview--") || host.includes("lovableproject.com");
 
     if (isDev || inIframe || isPreviewHost) {
       // Limpa qualquer SW antigo no preview/dev
