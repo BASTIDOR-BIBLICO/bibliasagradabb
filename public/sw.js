@@ -1,13 +1,15 @@
 // Service Worker — Bíblia Sagrada BB
-// Cacheia o shell do app (HTML, JS, CSS, fontes) para abrir offline.
-// Estratégia: NetworkFirst para HTML, StaleWhileRevalidate para assets.
+// Cache versionado. Mude CACHE_NAME a cada release para invalidar o cache antigo.
 
-const CACHE = "bb-shell-v1";
+const CACHE_NAME = "app-cache-v2026-05-20-01";
 const PRECACHE_URLS = ["/", "/manifest.json", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(PRECACHE_URLS)).then(() => self.skipWaiting()),
+    caches
+      .open(CACHE_NAME)
+      .then((c) => c.addAll(PRECACHE_URLS))
+      .then(() => self.skipWaiting()),
   );
 });
 
@@ -15,10 +17,16 @@ self.addEventListener("activate", (event) => {
   event.waitUntil(
     (async () => {
       const keys = await caches.keys();
-      await Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)));
+      await Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)));
       await self.clients.claim();
     })(),
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
 self.addEventListener("fetch", (event) => {
@@ -26,16 +34,16 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
 
   const url = new URL(req.url);
-  // Ignora chamadas para Supabase e outras APIs externas (não cachear dados)
+  // Não cacheia chamadas para APIs externas (Supabase etc.)
   if (url.hostname.includes("supabase.co")) return;
 
-  // NetworkFirst para navegações (HTML)
+  // NetworkFirst para navegações (HTML) — sempre tenta a versão mais nova
   if (req.mode === "navigate") {
     event.respondWith(
       (async () => {
         try {
-          const fresh = await fetch(req);
-          const cache = await caches.open(CACHE);
+          const fresh = await fetch(req, { cache: "no-store" });
+          const cache = await caches.open(CACHE_NAME);
           cache.put(req, fresh.clone());
           return fresh;
         } catch {
@@ -56,7 +64,7 @@ self.addEventListener("fetch", (event) => {
   if (isAsset) {
     event.respondWith(
       (async () => {
-        const cache = await caches.open(CACHE);
+        const cache = await caches.open(CACHE_NAME);
         const cached = await cache.match(req);
         const fetchPromise = fetch(req)
           .then((res) => {
