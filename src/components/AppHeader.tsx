@@ -1,9 +1,10 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { BookOpen, NotebookPen, LogOut, Sun, Moon } from "lucide-react";
+import { BookOpen, NotebookPen, LogOut, Sun, Moon, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/lib/supabase-stub";
 import { useReaderSettings } from "@/hooks/useReaderSettings";
 import { useAuth } from "@/hooks/useAuth";
+import { openInstallBanner } from "@/components/InstallBanner";
 
 export function AppHeader() {
   const router = useRouter();
@@ -35,6 +36,16 @@ export function AppHeader() {
               <NotebookPen className="mr-1.5 h-4 w-4" />
               <span className="hidden sm:inline">Devocionais</span>
             </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={openInstallBanner}
+            aria-label="Instalar app"
+            title="Instalar app"
+          >
+            <Download className="h-4 w-4 sm:mr-1.5" />
+            <span className="hidden sm:inline">Instalar app</span>
           </Button>
           <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema">
             {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
