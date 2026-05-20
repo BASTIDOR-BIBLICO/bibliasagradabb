@@ -65,7 +65,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Bíblia Sagrada BB" },
       { name: "description", content: "A sua Bíblia Sagrada digital e premium. Leitura rápida, limpa e sem distrações." },
-      { name: "theme-color", content: "#f8f6f1" },
+      { name: "theme-color", content: "#1A2B3C" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Bíblia BB" },
       { property: "og:title", content: "Bíblia Sagrada BB" },
       { name: "twitter:title", content: "Bíblia Sagrada BB" },
       { property: "og:description", content: "A sua Bíblia Sagrada digital e premium. Leitura rápida, limpa e sem distrações." },
@@ -133,6 +137,8 @@ function LayoutShell() {
     <div className="min-h-screen bg-background">
       {!hideHeader && <AppHeader />}
       <Outlet />
+      <InstallBanner />
+      <RegisterSW />
     </div>
   );
 }
