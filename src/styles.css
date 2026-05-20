@@ -2,6 +2,20 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Oculta selos/badges externos */
+a[href*='lovable.dev'],
+iframe[src*='lovable.dev'],
+div[style*='Edit with Lovable'],
+.lovable-badge,
+lovable-badge {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  position: absolute !important;
+  z-index: -9999 !important;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
