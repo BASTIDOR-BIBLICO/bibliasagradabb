@@ -37,6 +37,16 @@ export function AppHeader() {
               <span className="hidden sm:inline">Devocionais</span>
             </Link>
           </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={openInstallBanner}
+            aria-label="Instalar app"
+            title="Instalar app"
+          >
+            <Download className="h-4 w-4 sm:mr-1.5" />
+            <span className="hidden sm:inline">Instalar app</span>
+          </Button>
           <Button variant="ghost" size="icon" onClick={toggleTheme} aria-label="Alternar tema">
             {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
           </Button>
