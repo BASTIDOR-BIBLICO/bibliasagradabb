@@ -1,9 +1,10 @@
 import { Link, useRouter } from "@tanstack/react-router";
-import { BookOpen, NotebookPen, LogOut, Sun, Moon } from "lucide-react";
+import { BookOpen, NotebookPen, LogOut, Sun, Moon, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { authService } from "@/lib/supabase-stub";
 import { useReaderSettings } from "@/hooks/useReaderSettings";
 import { useAuth } from "@/hooks/useAuth";
+import { openInstallBanner } from "@/components/InstallBanner";
 
 export function AppHeader() {
   const router = useRouter();
