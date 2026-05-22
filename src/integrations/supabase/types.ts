@@ -14,13 +14,131 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_emails: {
+        Row: {
+          created_at: string
+          email: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+        }
+        Relationships: []
+      }
+      app_settings: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
+      books: {
+        Row: {
+          id: number
+          name: string
+          testament: string
+        }
+        Insert: {
+          id: number
+          name: string
+          testament: string
+        }
+        Update: {
+          id?: number
+          name?: string
+          testament?: string
+        }
+        Relationships: []
+      }
+      devotionals: {
+        Row: {
+          created_at: string
+          day_number: number
+          id: string
+          prayer: string
+          product_url: string | null
+          reflection: string
+          title: string
+          updated_at: string
+          verse_reference: string
+          verse_text: string
+        }
+        Insert: {
+          created_at?: string
+          day_number: number
+          id?: string
+          prayer: string
+          product_url?: string | null
+          reflection: string
+          title: string
+          updated_at?: string
+          verse_reference: string
+          verse_text: string
+        }
+        Update: {
+          created_at?: string
+          day_number?: number
+          id?: string
+          prayer?: string
+          product_url?: string | null
+          reflection?: string
+          title?: string
+          updated_at?: string
+          verse_reference?: string
+          verse_text?: string
+        }
+        Relationships: []
+      }
+      verses: {
+        Row: {
+          book_id: number
+          chapter: number
+          text: string
+          verse: number
+        }
+        Insert: {
+          book_id: number
+          chapter: number
+          text: string
+          verse: number
+        }
+        Update: {
+          book_id?: number
+          chapter?: number
+          text?: string
+          verse?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "verses_book_id_fkey"
+            columns: ["book_id"]
+            isOneToOne: false
+            referencedRelation: "books"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: { Args: never; Returns: boolean }
     }
     Enums: {
       [_ in never]: never
