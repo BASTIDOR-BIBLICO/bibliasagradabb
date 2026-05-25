@@ -4,6 +4,7 @@ import { BookOpen, NotebookPen, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { readingProgress, type LastRead } from "@/lib/reading-progress";
 import { useDevotionals } from "@/hooks/useDevotionals";
+import { LatestStudies } from "@/components/LatestStudies";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -27,6 +28,7 @@ function Dashboard() {
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-10 sm:py-16">
+      <LatestStudies />
       <section className="mb-12">
         <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
           {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
