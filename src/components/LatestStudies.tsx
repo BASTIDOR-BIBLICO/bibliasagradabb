@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Play, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,117 +8,137 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-interface Study {
-  id: string;
-  title: string;
-  videoId: string;
-}
-
-// Vídeos recentes do canal Bastidor Bíblico (estrutura local para evitar CORS/API).
-const STUDIES: Study[] = [
-  {
-    id: "1",
-    title: "O Mistério por Trás do Livro de Apocalipse",
-    videoId: "dQw4w9WgXcQ",
-  },
-  {
-    id: "2",
-    title: "Quem Realmente Escreveu os Evangelhos?",
-    videoId: "dQw4w9WgXcQ",
-  },
-  {
-    id: "3",
-    title: "Os Bastidores do Êxodo: Verdade ou Mito?",
-    videoId: "dQw4w9WgXcQ",
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const CHANNEL_URL = "https://www.youtube.com/@bastidorbiblico";
+const CHANNEL_HANDLE = "@bastidorbiblico";
+const SETTING_KEY = "latest_video_url";
+
+/**
+ * Extracts a YouTube video ID from common URL formats.
+ * Returns null when the URL points to a channel/handle (no specific video).
+ */
+function extractVideoId(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes("youtu.be")) {
+      const id = u.pathname.replace("/", "").trim();
+      return id || null;
+    }
+    if (u.hostname.includes("youtube.com")) {
+      const v = u.searchParams.get("v");
+      if (v) return v;
+      const parts = u.pathname.split("/").filter(Boolean);
+      const i = parts.findIndex((p) => ["embed", "shorts", "live"].includes(p));
+      if (i >= 0 && parts[i + 1]) return parts[i + 1];
+    }
+  } catch {
+    // not a parseable URL
+  }
+  return null;
+}
 
 export function LatestStudies() {
-  const [active, setActive] = useState<Study | null>(null);
+  const [open, setOpen] = useState(false);
+
+  const { data: videoUrl } = useQuery({
+    queryKey: ["app_settings", SETTING_KEY],
+    queryFn: async (): Promise<string | null> => {
+      const { data, error } = await supabase
+        .from("app_settings")
+        .select("value")
+        .eq("key", SETTING_KEY)
+        .maybeSingle();
+      if (error) throw error;
+      return (data?.value as string) ?? null;
+    },
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const videoId = extractVideoId(videoUrl);
+  const thumb = videoId
+    ? `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`
+    : null;
 
   return (
     <section className="mb-12">
-      <div className="mb-4 flex items-end justify-between">
-        <div>
-          <p className="text-xs uppercase tracking-[0.2em] text-primary">
-            Bastidor Bíblico
-          </p>
-          <h2 className="mt-1 font-serif text-2xl sm:text-3xl">
-            Últimos Estudos
-          </h2>
-        </div>
+      <div className="mb-4 text-center">
+        <p className="text-xs uppercase tracking-[0.2em] text-primary">
+          Bastidor Bíblico
+        </p>
+        <h2 className="mt-1 font-serif text-2xl sm:text-3xl">
+          ÚLTIMO VÍDEO DO NOSSO CANAL
+        </h2>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {STUDIES.map((s) => (
-          <article
-            key={s.id}
-            className="group overflow-hidden rounded-xl border border-border bg-card transition hover:border-primary/40 hover:shadow-sm"
-          >
+      <div className="mx-auto max-w-2xl">
+        {videoId ? (
+          <article className="group overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             <button
               type="button"
-              onClick={() => setActive(s)}
+              onClick={() => setOpen(true)}
               className="relative block aspect-video w-full overflow-hidden"
-              aria-label={`Assistir: ${s.title}`}
+              aria-label="Assistir ao último vídeo"
             >
-              <img
-                src={`https://i.ytimg.com/vi/${s.videoId}/hqdefault.jpg`}
-                alt={s.title}
-                loading="lazy"
-                className="h-full w-full object-cover transition group-hover:scale-105"
-              />
+              {thumb && (
+                <img
+                  src={thumb}
+                  alt="Último vídeo do canal Bastidor Bíblico"
+                  loading="lazy"
+                  className="h-full w-full object-cover transition group-hover:scale-105"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src =
+                      `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+                  }}
+                />
+              )}
               <span className="absolute inset-0 flex items-center justify-center bg-black/30 transition group-hover:bg-black/40">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg">
-                  <Play className="h-5 w-5 translate-x-0.5 fill-current" />
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg">
+                  <Play className="h-7 w-7 translate-x-0.5 fill-current" />
                 </span>
               </span>
             </button>
-            <div className="p-4">
-              <h3 className="line-clamp-2 font-serif text-base leading-snug">
-                {s.title}
-              </h3>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-3 w-full"
-                onClick={() => setActive(s)}
-              >
-                <Play className="mr-1.5 h-3.5 w-3.5" /> Assistir
-              </Button>
-            </div>
           </article>
-        ))}
-      </div>
-
-      <div className="mt-6 flex justify-center">
-        <Button asChild size="lg" className="gap-2">
+        ) : (
           <a
             href={CHANNEL_URL}
             target="_blank"
             rel="noopener noreferrer"
+            className="block aspect-video w-full overflow-hidden rounded-xl border border-dashed border-border bg-card"
           >
-            <Youtube className="h-5 w-5" />
-            🔴 Inscreva-se no canal Bastidor Bíblico
+            <div className="flex h-full w-full flex-col items-center justify-center gap-2 p-6 text-center">
+              <Youtube className="h-10 w-10 text-primary" />
+              <p className="font-serif text-lg">Canal Bastidor Bíblico</p>
+              <p className="text-sm text-muted-foreground">
+                Defina a URL do último vídeo no Painel do Administrador.
+              </p>
+            </div>
           </a>
-        </Button>
+        )}
+
+        <div className="mt-5 flex justify-center">
+          <Button asChild size="lg" className="gap-2">
+            <a href={CHANNEL_URL} target="_blank" rel="noopener noreferrer">
+              <Youtube className="h-5 w-5" />
+              🔴 Inscreva-se no canal {CHANNEL_HANDLE}
+            </a>
+          </Button>
+        </div>
       </div>
 
-      <Dialog open={!!active} onOpenChange={(o) => !o && setActive(null)}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-3xl p-0 sm:rounded-lg overflow-hidden">
           <DialogHeader className="px-6 pt-6">
             <DialogTitle className="font-serif text-lg">
-              {active?.title}
+              Último vídeo — Bastidor Bíblico
             </DialogTitle>
           </DialogHeader>
           <div className="aspect-video w-full bg-black">
-            {active && (
+            {videoId && open && (
               <iframe
-                key={active.id}
-                src={`https://www.youtube.com/embed/${active.videoId}?autoplay=1&rel=0`}
-                title={active.title}
+                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`}
+                title="Último vídeo do canal Bastidor Bíblico"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
                 className="h-full w-full border-0"
